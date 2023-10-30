@@ -35,3 +35,7 @@ if __name__ == '__main__':
     labirinto = Labirinto()
     labirinto.carregar_labirinto()
     labirinto.exibir()
+
+
+
+
