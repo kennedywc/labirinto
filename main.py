@@ -1,5 +1,6 @@
 # Local
 from constantes import *
+from labirinto import Labirinto
 
 # PYGAME
 import pygame
@@ -16,11 +17,13 @@ class Game:
         pygame.display.set_caption(TITULO_JANELA)
 
     def iniciar(self):
+        desenhar_labirinto = Labirinto()
+        desenhar_labirinto.carregar_labirinto()
 
         # Loop principal do jogo
         while True:
 
-            self.__tela.fill(COR_PRETA)
+            self.__tela.fill(COR_AZUL)
 
             # capturando eventos da janela
             for evento in pygame.event.get():
@@ -28,6 +31,8 @@ class Game:
                     # Encerra o Pygame
                     pygame.quit()
                     exit()
+
+            desenhar_labirinto.atualizar(self.__tela)
 
             # Atualize a tela dentro do loop
             pygame.display.flip()
