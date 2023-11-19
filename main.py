@@ -16,6 +16,8 @@ class Game:
         self.__tela = pygame.display.set_mode((LARGURA, ALTURA))
         pygame.display.set_caption(TITULO_JANELA)
 
+        self.__background = pygame.image.load('Assets/background.png')
+
     def iniciar(self):
         desenhar_labirinto = Labirinto()
         desenhar_labirinto.carregar_labirinto()
@@ -23,7 +25,7 @@ class Game:
         # Loop principal do jogo
         while True:
 
-            self.__tela.fill(COR_AZUL)
+            # self.__tela.fill(COR_AZUL)
 
             # capturando eventos da janela
             for evento in pygame.event.get():
@@ -31,6 +33,8 @@ class Game:
                     # Encerra o Pygame
                     pygame.quit()
                     exit()
+
+            self.__tela.blit(self.__background, (0, 0))
 
             desenhar_labirinto.atualizar(self.__tela)
 

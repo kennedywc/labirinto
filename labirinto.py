@@ -12,9 +12,10 @@ class Labirinto:
         self.__tamanho = {'linhas': 0, 'colunas': 0}
 
         # Exibição
-        self.__tamanho_quadrados = 90
-        self.__margem_top = 100
-        self.__margem_left = 210
+        # self.__tamanho_quadrados = 90
+        self.__tamanho_quadrados = 60
+        self.__margem_top = 200
+        self.__margem_left = 310
 
     def carregar_labirinto(self):
         try:
@@ -46,16 +47,21 @@ class Labirinto:
 
                 match valor:
                     case '0':
-                        cor = COR_BRANCA
-                    case '1' | 'x':
-                        cor = COR_PRETA
+                        imagem = pygame.image.load('Assets/tile_0000.png')
+                    case '1' | '|':
+                        imagem = pygame.image.load('Assets/Group13.png')
+                    case 'x':
+                        imagem = pygame.image.load('Assets/tile_0043.png')
                     case 'm':
-                        cor = COR_AMARELA
+                        imagem = pygame.image.load('Assets/rato.png')
                     case 'e':
-                        cor = COR_VERDE
+                        imagem = pygame.image.load('Assets/geo.png')
+                
+                # Redimensione a imagem
+                imagem = pygame.transform.scale(imagem, (self.__tamanho_quadrados, self.__tamanho_quadrados))
 
-                pygame.draw.rect(
-                    tela, cor, (pos_x, pos_y, self.__tamanho_quadrados, self.__tamanho_quadrados))
+                # desenha imagem na tela
+                tela.blit(imagem, (pos_x, pos_y))
 
 
 if __name__ == '__main__':
