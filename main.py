@@ -6,6 +6,7 @@ from labirinto import Labirinto
 import pygame
 from sys import exit
 
+
 class Game:
     def __init__(self):
 
@@ -15,12 +16,16 @@ class Game:
         # Crie uma tela Pygame
         self.__tela = pygame.display.set_mode((LARGURA, ALTURA))
         pygame.display.set_caption(TITULO_JANELA)
-
         self.__background = pygame.image.load('Assets/background.png')
+        
+        self.__clock = pygame.time.Clock()
+        
+        self.__efeito_sonoro = pygame.mixer.Sound('music/go.ogg')
 
     def iniciar(self):
-        desenhar_labirinto = Labirinto()
-        desenhar_labirinto.carregar_labirinto()
+        labirinto = Labirinto()
+        labirinto.carregar_labirinto()
+        comecar = False
 
         # Loop principal do jogo
         while True:
@@ -33,13 +38,22 @@ class Game:
                     # Encerra o Pygame
                     pygame.quit()
                     exit()
+                elif evento.type == pygame.KEYDOWN:
+                    comecar = True
+                    self.__efeito_sonoro.play()
+
+            if comecar:
+                comecar = labirinto.movimentar_rato()
+                
 
             self.__tela.blit(self.__background, (0, 0))
 
-            desenhar_labirinto.atualizar(self.__tela)
+            labirinto.atualizar(self.__tela)
 
             # Atualize a tela dentro do loop
             pygame.display.flip()
+            
+            self.__clock.tick(60)
 
 
 if __name__ == '__main__':
