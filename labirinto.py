@@ -8,7 +8,7 @@ import pygame
 class Labirinto:
     def __init__(self):
         # path
-        self.__caminho_arquivo = 'labirintos/labirinto.txt'
+        self.__caminho_arquivo = LABIRINTO
 
         # matriz estatica
         self.__labirinto = []
@@ -51,7 +51,7 @@ class Labirinto:
                 # a primeira linha é sempre no formato NxN
                 dimensoes_matriz = arquivo.readline()
 
-                linhas, colunas = map(int, dimensoes_matriz.split('x'))
+                linhas, colunas = map(int, dimensoes_matriz.split())
                 self.__tamanho.x = linhas
                 self.__tamanho.y = colunas
 
