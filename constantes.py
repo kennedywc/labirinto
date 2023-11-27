@@ -1,8 +1,4 @@
-import pygame
-
 # TELA (Display)
-pygame.init()
-
 ALTURA = 1920
 LARGURA = 1080
 
