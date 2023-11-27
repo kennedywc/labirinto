@@ -28,6 +28,13 @@ class Pilha:
             return self.__topo.data
         raise IndexError("A pilha está vazia")
 
+    def listar(self):
+        """Retorna todos os elementos da pilha em uma lista"""
+        lista = []
+        while self.__topo:
+            lista.append(self.desempilhar())
+        return lista
+
     @property
     def tamanho(self):
         """Retorna o tamanho da lista"""

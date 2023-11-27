@@ -4,10 +4,11 @@ from pilha.pilha import Pilha
 
 import pygame
 
+
 class Labirinto:
     def __init__(self):
         # path
-        self.__caminho_arquivo = 'labirintos/labirinto.txt'
+        self.__caminho_arquivo = 'labirintos/labirinto4.txt'
 
         # matriz estatica
         self.__labirinto = []
@@ -16,15 +17,30 @@ class Labirinto:
         self.__posicao_rato = Ponto()
 
         self.__caminho = Pilha()
-        
+
+
         # Exibição
         # self.__tamanho_quadrados = 90
-        self.__tamanho_quadrados = 60
+        self.__tamanho_quadrados = 40
         self.__margem_top = 200
         self.__margem_left = 310
 
-        # som de passo
-        self.__efeito_sonoro = pygame.mixer.Sound('music/footstep_carpet_001.ogg')
+        # EFEITOS SONOROS
+        self.__efeito_sonoro = pygame.mixer.Sound(MUSICA_ANDAR)
+        self.__efeito_sonoro2 = pygame.mixer.Sound(MUSICA_ACHOU_QUEIJO)
+
+        # Movimentar
+        self.__movimentacao = [
+            (1, 0, 'direita'),
+            (-1, 0, 'esquerda'),
+            (0, -1, 'cima'),
+            (0, 1, 'baixo')
+        ]
+
+    def caminho_certo(self):
+        caminhos = self.__caminho.listar()
+        for caminho in caminhos:
+            self.__labirinto[caminho.y][caminho.x] = CAMINHO_CERTO
 
     def carregar_labirinto(self):
         try:
@@ -36,12 +52,13 @@ class Labirinto:
                 linhas, colunas = map(int, dimensoes_matriz.split('x'))
                 self.__tamanho.x = linhas
                 self.__tamanho.y = colunas
-                
+
                 for indice, linha in enumerate(arquivo):
-                    if 'm' in linha:
-                        self.__posicao_rato.x = linha.find('m')
+                    if RATO in linha:
+                        self.__posicao_rato.x = linha.find(RATO)
                         self.__posicao_rato.y = indice
-                    
+                        self.__caminho.empilhar(self.__posicao_rato)
+
                     # Remove espaços e transforma em lista.
                     lista_caracteres = list(linha.strip())
                     self.__labirinto.append(lista_caracteres)
@@ -60,103 +77,92 @@ class Labirinto:
 
                 match valor:
                     case '0':
-                        imagem = pygame.image.load(GRAMA)
+                        imagem = pygame.image.load(IMG_GRAMA)
                     case '1' | '|':
-                        imagem = pygame.image.load(CAIXA)
+                        imagem = pygame.image.load(IMG_CAIXA)
                     case '.':
-                        imagem = pygame.image.load(LUGAR_VISITADO)
+                        imagem = pygame.image.load(IMG_LUGAR_VISITADO)
+                    case 'c':
+                        imagem = pygame.image.load(IMG_CERTO)
                     case 'm':
-                        imagem = pygame.image.load(RATO)
+                        imagem = pygame.image.load(IMG_RATO)
                     case 'e':
-                        imagem = pygame.image.load(QUEIJO)
-                
+                        imagem = pygame.image.load(IMG_QUEIJO)
+
                 # Redimensione a imagem
-                imagem = pygame.transform.scale(imagem, (self.__tamanho_quadrados, self.__tamanho_quadrados))
+                imagem = pygame.transform.scale(
+                    imagem, (self.__tamanho_quadrados, self.__tamanho_quadrados))
 
                 # desenha imagem na tela
                 tela.blit(imagem, (pos_x, pos_y))
 
     def valida_posicao(self, ponto):
-        if 0 <= ponto.x >= self.__tamanho.x and 0 <= ponto.y >= self.__tamanho.y:
-            return False
-
-        if self.__labirinto[ponto.y][ponto.x] not in '0e':
-            return False
-        
-        return True
-
-
-    def movimentar_rato(self):
-        nova_posicao = Ponto(self.__posicao_rato.x, self.__posicao_rato.y)
-    
 
         try:
-            nova_posicao.x += 1
-            if self.valida_posicao(nova_posicao):
-                print('direita',nova_posicao.y, nova_posicao.x)
-                self.__caminho.empilhar(nova_posicao)
-                self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = '.'
-                self.__labirinto[nova_posicao.y][nova_posicao.x] = 'm'
-                self.__posicao_rato = nova_posicao
-                self.__efeito_sonoro.play()
-                pygame.time.delay(1000)
-                return True
-
-
-
-            nova_posicao.x = self.__posicao_rato.x
-            nova_posicao.x -= 1
-            if self.valida_posicao(nova_posicao):
-                print('esquerda',nova_posicao.y, nova_posicao.x)
-                self.__caminho.empilhar(nova_posicao)
-                self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = '.'
-                self.__labirinto[nova_posicao.y][nova_posicao.x] = 'm'
-                self.__posicao_rato = nova_posicao
-                self.__efeito_sonoro.play()
-                pygame.time.delay(1000)
-                return True
-            
-
-            nova_posicao.x = self.__posicao_rato.x
-
-            nova_posicao.y -= 1
-            if self.valida_posicao(nova_posicao):
-                print('cima',nova_posicao.y, nova_posicao.x)
-                self.__caminho.empilhar(nova_posicao)
-                self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = '.'
-                self.__labirinto[nova_posicao.y][nova_posicao.x] = 'm'
-                self.__posicao_rato = nova_posicao
-                self.__efeito_sonoro.play()
-                pygame.time.delay(1000)
-                return True
-            
-
-            nova_posicao.y = self.__posicao_rato.y
-            nova_posicao.y += 1
-            if self.valida_posicao(nova_posicao):
-                print('baixo',nova_posicao.y, nova_posicao.x)
-                self.__caminho.empilhar(nova_posicao)
-                self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = '.'
-                self.__labirinto[nova_posicao.y][nova_posicao.x] = 'm'
-                self.__posicao_rato = nova_posicao
-                self.__efeito_sonoro.play()
-                pygame.time.delay(1000)
-                return True
-            elif self.__caminho.tamanho > 0:
-                self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = '.'
-                self.__posicao_rato = self.__caminho.desempilhar()
-                self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = 'm'
-                print('desempilha rato', self.__posicao_rato.y, self.__posicao_rato.x)
-                self.__efeito_sonoro.play()
-                pygame.time.delay(1000)
-                return True
-            
+            if self.__labirinto[ponto.y][ponto.x] not in (CAMINHO, QUEIJO):
+                return False
         except IndexError:
             return False
-        
+
+        return True
+
+    def movimentar_rato(self):
+
+        for movimento in self.__movimentacao:
+            posicao_x, posicao_y, direcao = movimento
+
+            nova_posicao = Ponto()
+            nova_posicao.x = self.__posicao_rato.x + posicao_x
+            nova_posicao.y = self.__posicao_rato.y + posicao_y
+
+            # Debug
+            print('Rato indo para: ', direcao, nova_posicao.y, nova_posicao.x)
+
+            if self.valida_posicao(nova_posicao):
+
+                self.__caminho.empilhar(nova_posicao)
+
+                if self.__labirinto[nova_posicao.y][nova_posicao.x] == QUEIJO:
+                    self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = CAMINHO_VISITADO
+                    self.__posicao_rato = nova_posicao
+                    self.__labirinto[nova_posicao.y][nova_posicao.x] = RATO
+
+                    self.__efeito_sonoro.play()
+                    pygame.time.delay(1000)
+                    self.__efeito_sonoro2.play()
+                    self.caminho_certo()
+
+                    return False
+
+                self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = CAMINHO_VISITADO
+                self.__labirinto[nova_posicao.y][nova_posicao.x] = RATO
+                self.__posicao_rato = nova_posicao
+
+                self.__efeito_sonoro.play()
+                pygame.time.delay(1000)
+
+                return True
+
+        if self.__caminho.tamanho > 1:
+
+            self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = CAMINHO_VISITADO
+
+            self.__caminho.desempilhar()
+            self.__posicao_rato = self.__caminho.ver_topo()
+
+            self.__labirinto[self.__posicao_rato.y][self.__posicao_rato.x] = RATO
+
+            print('Desempilhando o rato: ',
+                  self.__posicao_rato.y, self.__posicao_rato.x)
+
+            self.__efeito_sonoro.play()
+            pygame.time.delay(1000)
+
+            return True
+
+        # rato preso ou sem quijo
+        print('Rato sem saida!')
         return False
-
-
 
 
 if __name__ == '__main__':
