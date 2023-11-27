@@ -29,7 +29,7 @@ class Pilha:
         raise IndexError("A pilha está vazia")
 
     def listar(self):
-        """Retorna todos os elementos da pilha em uma lista"""
+        """Retorna todos os elementos da pilha em uma lista, desempilhando"""
         lista = []
         while self.__topo:
             lista.append(self.desempilhar())

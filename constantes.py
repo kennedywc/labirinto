@@ -1,8 +1,14 @@
+import pygame
+
 # TELA (Display)
-ALTURA = 900
-LARGURA = 900
+pygame.init()
+
+ALTURA = 1920
+LARGURA = 1080
 
 TITULO_JANELA = 'MAZE INSLAND'
+
+DELAY = 1000
 
 # SIMBOLOS
 QUEIJO = 'e'

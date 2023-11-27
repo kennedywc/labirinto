@@ -8,7 +8,7 @@ import pygame
 class Labirinto:
     def __init__(self):
         # path
-        self.__caminho_arquivo = 'labirintos/labirinto4.txt'
+        self.__caminho_arquivo = 'labirintos/labirinto.txt'
 
         # matriz estatica
         self.__labirinto = []
@@ -21,9 +21,11 @@ class Labirinto:
 
         # Exibição
         # self.__tamanho_quadrados = 90
+        
+
         self.__tamanho_quadrados = 40
-        self.__margem_top = 200
-        self.__margem_left = 310
+        self.__margem_top = 100
+        self.__margem_left = 100
 
         # EFEITOS SONOROS
         self.__efeito_sonoro = pygame.mixer.Sound(MUSICA_ANDAR)
@@ -128,7 +130,7 @@ class Labirinto:
                     self.__labirinto[nova_posicao.y][nova_posicao.x] = RATO
 
                     self.__efeito_sonoro.play()
-                    pygame.time.delay(1000)
+                    pygame.time.delay(DELAY)
                     self.__efeito_sonoro2.play()
                     self.caminho_certo()
 
@@ -139,7 +141,7 @@ class Labirinto:
                 self.__posicao_rato = nova_posicao
 
                 self.__efeito_sonoro.play()
-                pygame.time.delay(1000)
+                pygame.time.delay(DELAY)
 
                 return True
 
@@ -156,7 +158,7 @@ class Labirinto:
                   self.__posicao_rato.y, self.__posicao_rato.x)
 
             self.__efeito_sonoro.play()
-            pygame.time.delay(1000)
+            pygame.time.delay(DELAY)
 
             return True
 

@@ -15,12 +15,15 @@ class Game:
         pygame.init()
 
         # Crie uma tela Pygame
-        self.__tela = pygame.display.set_mode((LARGURA, ALTURA))
+        self.__tela = pygame.display.set_mode((ALTURA, LARGURA))
+
         pygame.display.set_caption(TITULO_JANELA)
         self.__background = pygame.image.load(BACKGROUND)
-        
+
+        # Velocidade
         self.__clock = pygame.time.Clock()
-        
+
+        # Efeitos sonoros
         self.__efeito_sonoro = pygame.mixer.Sound(MUSICA_INICIAR)
 
         # Fonte
@@ -29,16 +32,15 @@ class Game:
     def iniciar(self):
         labirinto = Labirinto()
         labirinto.carregar_labirinto()
+
         comecar = False
-
         parar = False
-
 
         # Loop principal do jogo
         while True:
-            self.__tela.blit(self.__background, (0, 0))
+            # self.__tela.blit(self.__background, (0, 0))
 
-            # self.__tela.fill(COR_AZUL)
+            self.__tela.fill(COR_AZUL)
 
             # capturando eventos da janela
             for evento in pygame.event.get():
@@ -62,24 +64,27 @@ class Game:
             if comecar:
                 comecar = labirinto.movimentar_rato()
             else:
-                if not parar:
-                    texto = self.__fonte.render('Teclar [ E S P A Ç O ] para começar', 
-                                                False, # texto suavizado 
-                                                COR_BRANCA)
                 
+                if not parar:
+                    texto = self.__fonte.render('Teclar [ E S P A Ç O ] para começar',
+                                                False,  # texto suavizado
+                                                COR_BRANCA)
 
                 if parar:
-                    texto = self.__fonte.render('Teclar [K] para sair', 
-                            False, # texto suavizado 
-                            COR_AMARELA)
+                    texto = self.__fonte.render('Teclar [K] para sair',
+                                                False,  # texto suavizado
+                                                COR_AMARELA)
+
+                retangulo_texto = texto.get_rect(midtop=(920, 20))
+
                 
-                self.__tela.blit(texto, (100 , 100))
-                
+                self.__tela.blit(texto, retangulo_texto)
+
             labirinto.atualizar(self.__tela)
 
             # Atualize a tela dentro do loop
             pygame.display.flip()
-            
+
             self.__clock.tick(60)
 
 
