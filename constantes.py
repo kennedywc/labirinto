@@ -1,4 +1,4 @@
-LABIRINTO = 'labirintos/labirinto4.txt'
+LABIRINTO = 'labirintos/prova2.txt'
 
 # TELA (Display)
 ALTURA = 1920
@@ -6,7 +6,8 @@ LARGURA = 1080
 
 TITULO_JANELA = 'ILHA DOS LABIRINTOS'
 
-DELAY = 1000
+TAMANHO_QUADROS = 40
+DELAY = 10
 
 # SIMBOLOS
 QUEIJO = 'e'

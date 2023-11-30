@@ -23,7 +23,7 @@ class Labirinto:
         # self.__tamanho_quadrados = 90
         
 
-        self.__tamanho_quadrados = 40
+        self.__tamanho_quadrados = TAMANHO_QUADROS
         self.__margem_top = 100
         self.__margem_left = 100
 
@@ -32,11 +32,20 @@ class Labirinto:
         self.__efeito_sonoro2 = pygame.mixer.Sound(MUSICA_ACHOU_QUEIJO)
 
         # Movimentar
+        """         
         self.__movimentacao = [
             (1, 0, 'direita'),
             (-1, 0, 'esquerda'),
             (0, -1, 'cima'),
             (0, 1, 'baixo')
+        ]
+        """
+
+        self.__movimentacao = [
+            (1, 0, 'direita'),
+            (-1, 0, 'esquerda'),
+            (0, 1, 'baixo'),
+            (0, -1, 'cima'),
         ]
 
     def caminho_certo(self):
